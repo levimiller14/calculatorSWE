@@ -14,3 +14,4 @@ bool App::OnInit()
 
 // change
 // another change
+// now, correctly implementing dropped in fragments of event table
