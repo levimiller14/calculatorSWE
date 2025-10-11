@@ -7,6 +7,9 @@ private:
 	// Event handler function
 	void OnButtonClick(wxCommandEvent& event);
 
+	// Equals Button/Calculations
+	double EvaluateExpression(wxString expression);
+
 	// enumerator for Button IDs?
 	enum
 	{
@@ -14,7 +17,7 @@ private:
 		ID_NUMBER_1,
 		ID_NUMBER_2,
 		ID_NUMBER_3,
-		ID_NUMEBR_4,
+		ID_NUMBER_4,
 		ID_NUMBER_5,
 		ID_NUMBER_6,
 		ID_NUMBER_7,

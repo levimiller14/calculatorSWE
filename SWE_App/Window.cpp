@@ -16,7 +16,7 @@ wxBEGIN_EVENT_TABLE(Window, wxFrame)
 	EVT_BUTTON(ID_NUMBER_1, OnButtonClick)
 	EVT_BUTTON(ID_NUMBER_2, OnButtonClick)
 	EVT_BUTTON(ID_NUMBER_3, OnButtonClick)
-	EVT_BUTTON(ID_NUMEBR_4, OnButtonClick)
+	EVT_BUTTON(ID_NUMBER_4, OnButtonClick)
 	EVT_BUTTON(ID_NUMBER_5, OnButtonClick)
 	EVT_BUTTON(ID_NUMBER_6, OnButtonClick)
 	EVT_BUTTON(ID_NUMBER_7, OnButtonClick)
@@ -50,6 +50,130 @@ void Window::OnButtonClick(wxCommandEvent& event)
 	// when a button of certain ID clicked
 	// do something
 
+	// Button Functionality
+	int id = event.GetId();
+	// 1.) When the following buttons are pressed, button label should be added to textbox
+	switch (id)
+	{
+		// a.) Numbers 0-9
+		case ID_NUMBER_0:
+			// adds to text box
+			textBox->AppendText("0");
+			break;
+		case ID_NUMBER_1:
+			textBox->AppendText("1");
+			break;
+		case ID_NUMBER_2:
+			textBox->AppendText("2");
+			break;
+		case ID_NUMBER_3:
+			textBox->AppendText("3");
+			break;
+		case ID_NUMBER_4:
+			textBox->AppendText("4");
+			break;
+		case ID_NUMBER_5:
+			textBox->AppendText("5");
+			break;
+		case ID_NUMBER_6:
+			textBox->AppendText("6");
+			break;
+		case ID_NUMBER_7:
+			textBox->AppendText("7");
+			break;
+		case ID_NUMBER_8:
+			textBox->AppendText("8");
+			break;
+		case ID_NUMBER_9:
+			textBox->AppendText("9");
+			break;
+
+		// b.) Binary Operators
+		case ID_ADD:
+			textBox->AppendText("+");
+			break;
+		case ID_SUB:
+			textBox->AppendText("-");
+			break;
+		case ID_MULT:
+			textBox->AppendText("*");
+			break;
+		case ID_DIV:
+			textBox->AppendText("/");
+			break;
+		case ID_MOD:
+			textBox->AppendText("");
+			break;
+
+		// c.) Decimal
+		case ID_DECIMAL:
+			textBox->AppendText(".");
+			break;
+
+		// d.) Negative
+		case ID_NEGATIVE:
+			textBox->AppendText("-");
+			break;
+
+		// e.) Unary Operators
+		case ID_SIN:
+			textBox->AppendText("sin");
+			break;
+		case ID_COS:
+			textBox->AppendText("cos");
+			break;
+		case ID_TAN:
+			textBox->AppendText("tan");
+			break;
+
+		// Clear (fully clear text box)
+		case ID_AC:
+			textBox->Clear();
+			break;
+
+		// Backspace (one character at a time)
+		case ID_C:
+		{
+
+			// if textBox not empty
+			wxString text = textBox->GetValue();
+			// special cases for sin/cos/tan because they are stubborn assholes
+			// if text finisher is "sin/cos/tan"
+			if (text.EndsWith("sin"))
+			{
+				// set current textBox Value to text - 3 (letters sin/cos/tan)
+				textBox->SetValue(text.substr(0, text.Length() - 3));
+			}
+			else if (text.EndsWith("cos"))
+			{
+				textBox->SetValue(text.substr(0, text.Length() - 3));
+			}
+			else if (text.EndsWith("tan"))
+			{
+				textBox->SetValue(text.substr(0, text.Length() - 3));
+			}
+			else if (!text.IsEmpty())
+			{
+				text.RemoveLast();
+				textBox->SetValue(text);
+			}
+			break;
+		}
+			
+		// Equals (calculate whatever string, clear it, display result in textbox)
+		case ID_EQUALS:
+			// Equals Button/Calculations
+			//
+			//textBox->AppendText("=");
+			break;
+	}
+	
+}
+
+// Equals Button/Calculations Implementation
+double Window::EvaluateExpression(wxString expression)
+{
+	return 0.0;
 }
 
 Window::Window() : wxFrame(nullptr, wxID_ANY, "CALCULATOR", wxPoint(200, 200), wxSize(500, 500))
@@ -64,7 +188,7 @@ Window::Window() : wxFrame(nullptr, wxID_ANY, "CALCULATOR", wxPoint(200, 200), w
 	number1 = new wxButton(this, ID_NUMBER_1, "1", wxPoint(10, 350), wxSize(50, 50));
 	number2 = new wxButton(this, ID_NUMBER_2, "2", wxPoint(60, 350), wxSize(50, 50));
 	number3 = new wxButton(this, ID_NUMBER_3, "3", wxPoint(110, 350), wxSize(50, 50));
-	number4 = new wxButton(this, ID_NUMEBR_4, "4", wxPoint(10, 300), wxSize(50, 50));
+	number4 = new wxButton(this, ID_NUMBER_4, "4", wxPoint(10, 300), wxSize(50, 50));
 	number5 = new wxButton(this, ID_NUMBER_5, "5", wxPoint(60, 300), wxSize(50, 50));
 	number6 = new wxButton(this, ID_NUMBER_6, "6", wxPoint(110, 300), wxSize(50, 50));
 	number7 = new wxButton(this, ID_NUMBER_7, "7", wxPoint(10, 250), wxSize(50, 50));
