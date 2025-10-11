@@ -1,4 +1,6 @@
-#include "Window.h"
+#include "Window.h" 
+#include "wx/tokenzr.h"
+#include <cmath>
 
 // part 2
 // event table in implementation file (Window.cpp), tells wxWidgets how to map events to member functions
@@ -102,7 +104,7 @@ void Window::OnButtonClick(wxCommandEvent& event)
 			textBox->AppendText("/");
 			break;
 		case ID_MOD:
-			textBox->AppendText("");
+			textBox->AppendText("%");
 			break;
 
 		// c.) Decimal
@@ -163,17 +165,164 @@ void Window::OnButtonClick(wxCommandEvent& event)
 		// Equals (calculate whatever string, clear it, display result in textbox)
 		case ID_EQUALS:
 			// Equals Button/Calculations
-			//
-			//textBox->AppendText("=");
+			// Implement simple calculations/evaluations
+			wxString expression = textBox->GetValue();
+
+			// empty?
+			if (expression.IsEmpty())
+			{
+				break; // nothing
+			}
+
+			double result = 0;
+			bool success = EvaluateExpression(expression, result);
+
+			if (success)
+			{
+				double rounded = round(result * 100.0) / 100.0;
+				textBox->SetValue(std::to_string(rounded));
+			}
+			else
+			{
+				textBox->SetValue("Error");
+			}
 			break;
 	}
-	
+			//textBox->AppendText("=");
 }
 
 // Equals Button/Calculations Implementation
-double Window::EvaluateExpression(wxString expression)
+bool Window::EvaluateExpression(wxString expression, double& result)
 {
-	return 0.0;
+
+	const double pidiv180 = 3.14159265359 / 180;
+
+	//// UNARY
+	// sin
+	if (expression.StartsWith("sin"))
+	{
+		wxString numStr = expression.Mid(3);
+
+		if (numStr.IsEmpty())
+		{
+			return false;
+		}
+
+		double angle;
+
+		if (!numStr.ToDouble(&angle))
+		{
+			return false;
+		}
+		
+		result = std::sin(angle * pidiv180);
+		return true;
+	}
+	// cos
+	else if (expression.StartsWith("cos"))
+	{
+		wxString numStr = expression.Mid(3);
+		if (numStr.IsEmpty())
+		{
+			return false;
+		}
+
+		double angle;
+
+		if (!numStr.ToDouble(&angle))
+		{
+			return false;
+		}
+
+		result = std::cos(angle * pidiv180);
+		return true;
+	}
+	// tan
+	else if (expression.StartsWith("tan"))
+	{
+		wxString numStr = expression.Mid(3);
+		if (numStr.IsEmpty())
+		{
+			return false;
+		}
+
+		double angle;
+
+		if (!numStr.ToDouble(&angle))
+		{
+			return false;
+		}
+
+		result = std::tan(angle * pidiv180);
+		return true;
+	}
+	
+	// BINARY
+	// find operator position?
+	wxString op = "";
+	int opPos = -1;
+
+	for (int i = 0; i < expression.Length(); i++)
+	{
+		wxChar c = expression[i];
+		if (c == '+' || c == '-' || c == '*' || c == '/' || c == '%')
+		{
+			op = c;
+			opPos = i;
+			break;
+		}
+	}
+
+	if (opPos == -1)
+		return false; // NO OPERATOR found
+
+	// split expression at operator
+	wxString leftStr = expression.Mid(0, opPos);
+	wxString rightStr = expression.Mid(opPos + 1);
+
+	if (leftStr.IsEmpty() || rightStr.IsEmpty())
+		return false;
+
+	double num1 = std::stod(leftStr.ToStdString());
+	double num2 = std::stod(rightStr.ToStdString());
+
+	// addition
+	if (op == "+")
+	{
+		result = num1 + num2;
+		return true;
+	}
+	// subtraction
+	else if (op == "-")
+	{
+		result = num1 - num2;
+		return true;
+	}
+	// multiplication
+	else if (op == "*")
+	{
+		result = num1 * num2;
+		return true;
+	}
+	// division
+	else if (op == "/")
+	{
+		// handle div by 0
+		if (num2 == 0)
+			return false;
+		//
+		result = num1 / num2;
+		return true;
+	}
+	// mod
+	else if (op == "%")
+	{
+		// handle by 0
+		if (num2 == 0)
+			return false;
+		result = fmod(num1, num2);
+		return true;
+	}
 }
 
 Window::Window() : wxFrame(nullptr, wxID_ANY, "CALCULATOR", wxPoint(200, 200), wxSize(500, 500))

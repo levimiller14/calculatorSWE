@@ -8,7 +8,7 @@ private:
 	void OnButtonClick(wxCommandEvent& event);
 
 	// Equals Button/Calculations
-	double EvaluateExpression(wxString expression);
+	bool EvaluateExpression(wxString expression, double& result);
 
 	// enumerator for Button IDs?
 	enum
