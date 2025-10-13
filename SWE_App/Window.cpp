@@ -197,132 +197,444 @@ bool Window::EvaluateExpression(wxString expression, double& result)
 
 	const double pidiv180 = 3.14159265359 / 180;
 
-	//// UNARY
-	// sin
-	if (expression.StartsWith("sin"))
+	try
 	{
-		wxString numStr = expression.Mid(3);
-
-		if (numStr.IsEmpty())
+		for (int i = 1; i < expression.Length() - 2; i++)
 		{
-			return false;
-		}
-
-		double angle;
-
-		if (!numStr.ToDouble(&angle))
-		{
-			return false;
+			//check for digits before trig 
+			if (wxIsdigit(expression[i - 1]))
+			{
+				if (expression.Mid(i, 3) == "sin" || expression.Mid(i, 3) == "cos" || expression.Mid(i, 3) == "tan")
+				{
+					// handle mult between value and trig
+					expression = expression.Mid(0, i) + "*" + expression.Mid(i);
+					break;
+				}
+			}
 		}
 		
-		result = std::sin(angle * pidiv180);
-		return true;
+		// FIND OPERATOR POSITION
+		wxString op = "";
+		int opPos = -1;
+
+		for (int i = 0; i < expression.Length(); i++)
+		{
+			wxChar c = expression[i];
+			if (c == '+' || c == '-' || c == '*' || c == '/' || c == '%')
+			{
+				op = c;
+				opPos = i;
+				break;
+			}
+		}
+
+		// If found - Binary
+		if (opPos != -1)
+		{
+			wxString leftStr = expression.Mid(0, opPos);
+			wxString rightStr = expression.Mid(opPos + 1);
+
+			if (leftStr.IsEmpty() || rightStr.IsEmpty())
+				return false;
+
+			double num1 = 0;
+			double num2 = 0;
+
+			// Evaluate LEFT SIDE
+			if (leftStr.StartsWith("sin"))
+			{
+				wxString numStr = leftStr.Mid(3);
+				double angle;
+				if (numStr.IsEmpty() || !numStr.ToDouble(&angle))
+					return false;
+				num1 = std::sin(angle * pidiv180);
+			}
+			else if (leftStr.StartsWith("cos"))
+			{
+				wxString numStr = leftStr.Mid(3);
+				double angle;
+				if (numStr.IsEmpty() || !numStr.ToDouble(&angle))
+					return false;
+				num1 = std::cos(angle * pidiv180);
+			}
+			else if (leftStr.StartsWith("tan"))
+			{
+				wxString numStr = leftStr.Mid(3);
+				double angle;
+				if (numStr.IsEmpty() || !numStr.ToDouble(&angle))
+					return false;
+				num1 = std::tan(angle * pidiv180);
+			}
+			else
+			{
+				num1 = std::stod(leftStr.ToStdString());
+			}
+			// RIGHT SIDE
+			if (rightStr.StartsWith("sin"))
+			{
+				wxString numStr = rightStr.Mid(3);
+				double angle;
+				if (numStr.IsEmpty() || !numStr.ToDouble(&angle))
+					return false;
+				num2 = std::sin(angle * pidiv180);
+			}
+			else if (rightStr.StartsWith("cos"))
+			{
+				wxString numStr = rightStr.Mid(3);
+				double angle;
+				if (numStr.IsEmpty() || !numStr.ToDouble(&angle))
+					return false;
+				num2 = std::cos(angle * pidiv180);
+			}
+			else if (rightStr.StartsWith("tan"))
+			{
+				wxString numStr = rightStr.Mid(3);
+				double angle;
+				if (numStr.IsEmpty() || !numStr.ToDouble(&angle))
+					return false;
+				num2 = std::tan(angle * pidiv180);
+			}
+			else
+			{
+				num2 = std::stod(rightStr.ToStdString());
+			}
+
+			// perform OPERATION
+			if (op == "+")
+				result = num1 + num2;
+			else if (op == "-")
+				result = num1 - num2;
+			else if (op == "*")
+				result = num1 * num2;
+			else if (op == "/")
+			{
+				if (num2 == 0)
+					return false;
+				result = num1 / num2;
+			}
+			else if (op == "%")
+			{
+				if (num2 == 0)
+					return false;
+				result = fmod(num1, num2);
+			}
+			else
+				return false;
+
+			return true;
+		}
+		else
+		{
+			// NO OPERATOR just trig function/number
+			if (expression.StartsWith("sin"))
+			{
+				wxString numStr = expression.Mid(3);
+				double angle;
+				if (numStr.IsEmpty() || !numStr.ToDouble(&angle))
+					return false;
+				result = std::sin(angle * pidiv180);
+				return true;
+			}
+			else if (expression.StartsWith("cos"))
+			{
+				wxString numStr = expression.Mid(3);
+				double angle;
+				if (numStr.IsEmpty() || !numStr.ToDouble(&angle))
+					return false;
+				result = std::cos(angle * pidiv180);
+				return true;
+			}
+			else if (expression.StartsWith("tan"))
+			{
+				wxString numStr = expression.Mid(3);
+				double angle;
+				if (numStr.IsEmpty() || !numStr.ToDouble(&angle))
+					return false;
+				result = std::tan(angle * pidiv180);
+				return true;
+			}
+			else
+			{
+				result = std::stod(expression.ToStdString());
+				return true;
+			}
+		}
 	}
-	// cos
-	else if (expression.StartsWith("cos"))
+	catch (const std::invalid_argument&)
 	{
-		wxString numStr = expression.Mid(3);
-		if (numStr.IsEmpty())
-		{
-			return false;
-		}
-
-		double angle;
-
-		if (!numStr.ToDouble(&angle))
-		{
-			return false;
-		}
-
-		result = std::cos(angle * pidiv180);
-		return true;
-	}
-	// tan
-	else if (expression.StartsWith("tan"))
-	{
-		wxString numStr = expression.Mid(3);
-		if (numStr.IsEmpty())
-		{
-			return false;
-		}
-
-		double angle;
-
-		if (!numStr.ToDouble(&angle))
-		{
-			return false;
-		}
-
-		result = std::tan(angle * pidiv180);
-		return true;
-	}
-	
-	// BINARY
-	// find operator position?
-	wxString op = "";
-	int opPos = -1;
-
-	for (int i = 0; i < expression.Length(); i++)
-	{
-		wxChar c = expression[i];
-		if (c == '+' || c == '-' || c == '*' || c == '/' || c == '%')
-		{
-			op = c;
-			opPos = i;
-			break;
-		}
-	}
-
-	if (opPos == -1)
-		return false; // NO OPERATOR found
-
-	// split expression at operator
-	wxString leftStr = expression.Mid(0, opPos);
-	wxString rightStr = expression.Mid(opPos + 1);
-
-	if (leftStr.IsEmpty() || rightStr.IsEmpty())
 		return false;
+	}
+	catch (const std::out_of_range&)
+	{
+		return false;
+	}
+	// "CATCH ALL"
+	catch (...)
+	{
+		return false;
+	}
 
-	double num1 = std::stod(leftStr.ToStdString());
-	double num2 = std::stod(rightStr.ToStdString());
+	// can't handle 8sin180 ... "implied multiplication"
+	//for (int i = 1; i < expression.Length() - 2; i++)
+	//{
+	//	//check for digits before trig 
+	//	if (wxIsdigit(expression[i - 1]))
+	//	{
+	//		if (expression.Mid(i, 3) == "sin" || expression.Mid(i, 3) == "cos" || expression.Mid(i, 3) == "tan")
+	//		{
+	//			// handle mult between value and trig
+	//			expression = expression.Mid(0, i) + "*" + expression.Mid(i);
+	//			break;
+	//		}
+	//	}
+	//}
+	//// that didnt work smh
+	
+	// what the fuck am i doingggggggggg
+	//try
+	//{
+	//	// BINARY
+	//	// find operator position?
+	//	wxString op = "";
+	//	int opPos = -1;
+	//
+	//	for (int i = 0; i < expression.Length(); i++)
+	//	{
+	//		wxChar c = expression[i];
+	//		if (c == '+' || c == '-' || c == '*' || c == '/' || c == '%')
+	//		{
+	//			op = c;
+	//			opPos = i;
+	//			break;
+	//		}
+	//	}
+	//	if (opPos == -1)
+	//	{
+	//		// split expression at operator
+	//		wxString leftStr = expression.Mid(0, opPos);
+	//		wxString rightStr = expression.Mid(opPos + 1);
+	//
+	//		if (leftStr.IsEmpty() || rightStr.IsEmpty())
+	//			return false;
+	//
+	//		double num1, num2;
+	//
+	//		//// UNARY
+	//		// sin
+	//		if (expression.StartsWith("sin"))
+	//		{
+	//			wxString numStr = expression.Mid(3);
+	//
+	//			if (numStr.IsEmpty() || !numStr.ToDouble(&num1))
+	//			{
+	//				return false;
+	//				num1 = std::sin(num1 * pidiv180);
+	//			}
+	//		}
+	//		// cos
+	//		else if (expression.StartsWith("cos"))
+	//		{
+	//			wxString numStr = expression.Mid(3);
+	//			if (numStr.IsEmpty() || !numStr.ToDouble(&num1))
+	//			{
+	//				return false;
+	//				num1 = std::cos(num1 * pidiv180);
+	//			}
+	//		}
+	//		// tan
+	//		else if (expression.StartsWith("tan"))
+	//		{
+	//			wxString numStr = expression.Mid(3);
+	//			if (numStr.IsEmpty() || !numStr.ToDouble(&num1))
+	//			{
+	//				return false;
+	//				num1 = std::tan(num1 * pidiv180);
+	//			}
+	//			else
+	//			{
+	//				num1 = std::stod(leftStr.ToStdString());
+	//			}
+	//			if (rightStr.StartsWith("sin"))
+	//			{
+	//				wxString numStr = rightStr.Mid(3);
+	//				if (numStr.IsEmpty() || !numStr.ToDouble(&num2))
+	//				{
+	//					return false;
+	//					num2 = std::sin(num2 * pidiv180);
+	//				}
+	//				else if (rightStr.StartsWith("cos"))
+	//				{
+	//					wxString numStr = rightStr.Mid(3);
+	//					if (numStr.IsEmpty() || !numStr.ToDouble(&num2))
+	//					{
+	//						return false;
+	//						num2 = std::cos(num2 * pidiv180);
+	//					}
+	//				}
+	//				else if (rightStr.StartsWith("tan"))
+	//				{
+	//					wxString numStr = rightStr.Mid(3);
+	//					if (numStr.IsEmpty() || !numStr.ToDouble(&num2))
+	//					{
+	//						return false;
+	//						num2 = std::tan(num2 * pidiv180);
+	//					}
+	//				}
+	//				else
+	//				{
+	//					// right side regular number
+	//					num2 = std::stod(rightStr.ToStdString());
+	//				}
+	//				//addition
+	//				if (op == "+")
+	//				{
+	//					result = num1 + num2;
+	//					return true;
+	//				}
+	//				// subtraction
+	//				else if (op == "-")
+	//				{
+	//					result = num1 - num2;
+	//					return true;
+	//				}
+	//				// multiplication
+	//				else if (op == "*")
+	//				{
+	//					result = num1 * num2;
+	//					return true;
+	//				}
+	//				// division
+	//				else if (op == "/")
+	//				{
+	//					// handle div by 0
+	//					if (num2 == 0)
+	//						return false;
+	//					//
+	//					result = num1 / num2;
+	//					return true;
+	//				}
+	//				// mod
+	//				else if (op == "%")
+	//				{
+	//					// handle by 0
+	//					if (num2 == 0)
+	//						return false;
+	//					result = fmod(num1, num2);
+	//					return true;
+	//				}
+	//			}
+	//			else
+	//			{
+	//				// no operator found , just trig function?
+	//				if (expression.StartsWith("sin"))
+	//				{
+	//					wxString numStr = expression.Mid(3);
+	//					if (numStr.IsEmpty())
+	//						return false;
+	//
+	//					double angle;
+	//					if (!numStr.ToDouble(&angle))
+	//						return false;
+	//
+	//					result = std::sin(angle * pidiv180);
+	//					return true;
+	//				}
+	//				else if (expression.StartsWith("cos"))
+	//				{
+	//					wxString numStr = expression.Mid(3);
+	//					if (numStr.IsEmpty())
+	//						return false;
+	//
+	//					double angle;
+	//					if (!numStr.ToDouble(&angle))
+	//						return false;
+	//
+	//					result = std::cos(angle * pidiv180);
+	//					return true;
+	//				}
+	//				else if (expression.StartsWith("tan"))
+	//				{
+	//					wxString numStr = expression.Mid(3);
+	//					if (numStr.IsEmpty())
+	//						return false;
+	//
+	//					double angle;
+	//					if (!numStr.ToDouble(&angle))
+	//						return false;
+	//
+	//					result = std::tan(angle * pidiv180);
+	//					return true;
+	//				}
+	//			}
+	//		}
+	//		catch (const std::invalid_argument&)
+	//		{
+	//			return false;
+	//		}
+	//		catch (const std::out_of_range&)
+	//		{
+	//			return false;
+	//		}
+	//		return false;
+	//}
+	//
+	//// tryCatchOverhaul?
+	//// handle invalid conversions
+	//
+	//	double num1 = std::stod(leftStr.ToStdString());
+	//	double num2 = std::stod(rightStr.ToStdString());
+	//
+	//	// addition
+	//	if (op == "+")
+	//	{
+	//		result = num1 + num2;
+	//		return true;
+	//	}
+	//	// subtraction
+	//	else if (op == "-")
+	//	{
+	//		result = num1 - num2;
+	//		return true;
+	//	}
+	//	// multiplication
+	//	else if (op == "*")
+	//	{
+	//		result = num1 * num2;
+	//		return true;
+	//	}
+	//	// division
+	//	else if (op == "/")
+	//	{
+	//		// handle div by 0
+	//		if (num2 == 0)
+	//			return false;
+	//		//
+	//		result = num1 / num2;
+	//		return true;
+	//	}
+	//	// mod
+	//	else if (op == "%")
+	//	{
+	//		// handle by 0
+	//		if (num2 == 0)
+	//			return false;
+	//		result = fmod(num1, num2);
+	//		return true;
+	//	}
+	//}
+	//// invalid formatting
+	//catch (const std::invalid_argument&)
+	//{
+	//	return false;
+	//}
+	//// number too large
+	//catch (const std::out_of_range&)
+	//{
+	//	return false; 
+	//}
+	//// unkown operator
+	//return false;
 
-	// addition
-	if (op == "+")
-	{
-		result = num1 + num2;
-		return true;
-	}
-	// subtraction
-	else if (op == "-")
-	{
-		result = num1 - num2;
-		return true;
-	}
-	// multiplication
-	else if (op == "*")
-	{
-		result = num1 * num2;
-		return true;
-	}
-	// division
-	else if (op == "/")
-	{
-		// handle div by 0
-		if (num2 == 0)
-			return false;
-		//
-		result = num1 / num2;
-		return true;
-	}
-	// mod
-	else if (op == "%")
-	{
-		// handle by 0
-		if (num2 == 0)
-			return false;
-		result = fmod(num1, num2);
-		return true;
-	}
 }
 
 Window::Window() : wxFrame(nullptr, wxID_ANY, "CALCULATOR", wxPoint(200, 200), wxSize(500, 500))
