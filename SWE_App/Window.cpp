@@ -658,11 +658,22 @@ Window::Window() : wxFrame(nullptr, wxID_ANY, "CALCULATOR", wxPoint(200, 200), w
 	number7 = ButtonFactory::CreateNumber7Button(this);
 	number8 = ButtonFactory::CreateNumber8Button(this);
 	number9 = ButtonFactory::CreateNumber9Button(this);
+
 	add = ButtonFactory::CreateAddButton(this);
 	sub = ButtonFactory::CreateSubButton(this);
 	mult = ButtonFactory::CreateMultButton(this);
 	div = ButtonFactory::CreateDivButton(this);
 	mod = ButtonFactory::CreateModButton(this);
+
+	sin = ButtonFactory::CreateSinButton(this);
+	cos = ButtonFactory::CreateCosButton(this);
+	tan = ButtonFactory::CreateTanButton(this);
+
+	equals = ButtonFactory::CreateEqualsButton(this);
+	AC = ButtonFactory::CreateACButton(this);
+	C = ButtonFactory::CreateCButton(this);
+	decimal = ButtonFactory::CreateDecimalButton(this);
+	negative = ButtonFactory::CreateNegativeButton(this);
 
 	//number1 = new wxButton(this, ID_NUMBER_1, "1", wxPoint(10, 350), wxSize(50, 50));
 	//number2 = new wxButton(this, ID_NUMBER_2, "2", wxPoint(60, 350), wxSize(50, 50));
@@ -679,20 +690,20 @@ Window::Window() : wxFrame(nullptr, wxID_ANY, "CALCULATOR", wxPoint(200, 200), w
 	//mult = new wxButton(this, ID_MULT, "*", wxPoint(160, 300), wxSize(50, 50));
 	//div = new wxButton(this, ID_DIV, "/", wxPoint(210, 300), wxSize(50, 50));
 	//mod = new wxButton(this, ID_MOD, "mod", wxPoint(210, 400), wxSize(50, 50));
-	
+	//
 	// d.) Unary Operators: sin, cos, tan (rads and/or deg)
-	sin = new wxButton(this, ID_SIN, "sin(x)", wxPoint(60, 200), wxSize(50, 50));
-	cos = new wxButton(this, ID_COS, "cos(x)", wxPoint(110, 200), wxSize(50, 50));
-	tan = new wxButton(this, ID_TAN, "tan(x)", wxPoint(160, 200), wxSize(50, 50));
+	//sin = new wxButton(this, ID_SIN, "sin(x)", wxPoint(60, 200), wxSize(50, 50));
+	//cos = new wxButton(this, ID_COS, "cos(x)", wxPoint(110, 200), wxSize(50, 50));
+	//tan = new wxButton(this, ID_TAN, "tan(x)", wxPoint(160, 200), wxSize(50, 50));
 	// e.) Equals: = 
-	equals = new wxButton(this, ID_EQUALS, "=", wxPoint(160, 400), wxSize(50, 50));
+	//equals = new wxButton(this, ID_EQUALS, "=", wxPoint(160, 400), wxSize(50, 50));
 	// f.) Clear 
-	AC = new wxButton(this, ID_AC, "AC", wxPoint(210, 250), wxSize(50, 50));
+	//AC = new wxButton(this, ID_AC, "AC", wxPoint(210, 250), wxSize(50, 50));
 	// g.) Backspace/delete
-	C = new wxButton(this, ID_C, "C", wxPoint(160, 250), wxSize(50, 50));
+	//C = new wxButton(this, ID_C, "C", wxPoint(160, 250), wxSize(50, 50));
 	// h.) Decimal (adds decimal point to text control)
-	decimal = new wxButton(this, ID_DECIMAL, ".", wxPoint(60, 400), wxSize(50, 50));
+	//decimal = new wxButton(this, ID_DECIMAL, ".", wxPoint(60, 400), wxSize(50, 50));
 	// i.) Negative (adds a negative symbol to the text control)
-	negative = new wxButton(this, ID_NEGATIVE, "-(x)", wxPoint(110, 400), wxSize(50, 50));
+	//negative = new wxButton(this, ID_NEGATIVE, "-(x)", wxPoint(110, 400), wxSize(50, 50));
 
 }

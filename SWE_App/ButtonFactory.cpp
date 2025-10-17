@@ -88,3 +88,45 @@ wxButton* ButtonFactory::CreateModButton(wxWindow* parent)
 {
 	return CreateStandardButton(parent, Window::ID_MOD, "mod", 210, 400);
 }
+
+// forgot these in pt 1. finishing here
+wxButton* ButtonFactory::CreateSinButton(wxWindow* parent)
+{
+	return CreateStandardButton(parent, Window::ID_SIN, "sin(x)", 60, 200);
+}
+
+wxButton* ButtonFactory::CreateCosButton(wxWindow* parent)
+{
+	return CreateStandardButton(parent, Window::ID_COS, "cos(x)", 110, 200);
+}
+
+wxButton* ButtonFactory::CreateTanButton(wxWindow* parent)
+{
+	return CreateStandardButton(parent, Window::ID_TAN, "tan(x)", 160, 200);
+}
+
+wxButton* ButtonFactory::CreateEqualsButton(wxWindow* parent)
+{
+	return CreateStandardButton(parent, Window::ID_EQUALS, "=", 160, 400);
+}
+
+wxButton* ButtonFactory::CreateACButton(wxWindow* parent)
+{
+	return CreateStandardButton(parent, Window::ID_AC, "AC", 210, 250);
+}
+
+wxButton* ButtonFactory::CreateNegativeButton(wxWindow* parent)
+{
+	return CreateStandardButton(parent, Window::ID_C, "C", 160, 250);
+}
+
+wxButton* ButtonFactory::CreateCButton(wxWindow* parent)
+{
+	return CreateStandardButton(parent, Window::ID_DECIMAL, ".", 60, 400);
+}
+
+wxButton* ButtonFactory::CreateDecimalButton(wxWindow* parent)
+{
+	return CreateStandardButton(parent, Window::ID_NEGATIVE, "-(x)", 110, 400);
+}
+
