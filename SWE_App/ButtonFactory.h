@@ -34,13 +34,19 @@ public:
 	static wxButton* CreateDivButton(wxWindow* parent);
 	static wxButton* CreateModButton(wxWindow* parent);
 
-	//static wxButton* CreateNumber0Button(wxWindow* parent);
-	//static wxButton* CreateNumber0Button(wxWindow* parent);
-	//static wxButton* CreateNumber0Button(wxWindow* parent);
-	//static wxButton* CreateNumber0Button(wxWindow* parent);
-	//static wxButton* CreateNumber0Button(wxWindow* parent);
-	//static wxButton* CreateNumber0Button(wxWindow* parent);
-	//static wxButton* CreateNumber0Button(wxWindow* parent);
+	// forgot these smh
+	// Unary Operators
+	static wxButton* CreateSinButton(wxWindow* parent);
+	static wxButton* CreateCosButton(wxWindow* parent);
+	static wxButton* CreateTanButton(wxWindow* parent);
+
+	// Symbols (=, all clear, backspace, decimal, negative)
+	static wxButton* CreateEqualsButton(wxWindow* parent);
+	static wxButton* CreateACButton(wxWindow* parent);
+	static wxButton* CreateCButton(wxWindow* parent);
+	static wxButton* CreateDecimalButton(wxWindow* parent);
+	static wxButton* CreateNegativeButton(wxWindow* parent);
+
 	//static wxButton* CreateNumber0Button(wxWindow* parent);
 	//static wxButton* CreateNumber0Button(wxWindow* parent);
 	//static wxButton* CreateNumber0Button(wxWindow* parent);
