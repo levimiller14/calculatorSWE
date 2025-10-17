@@ -1,6 +1,7 @@
 #include "Window.h" 
 #include "wx/tokenzr.h"
 #include <cmath>
+#include "ButtonFactory.h"
 
 // part 2
 // event table in implementation file (Window.cpp), tells wxWidgets how to map events to member functions
@@ -645,22 +646,40 @@ Window::Window() : wxFrame(nullptr, wxID_ANY, "CALCULATOR", wxPoint(200, 200), w
 	// a.) A text control
 	textBox = new wxTextCtrl(this, wxID_ANY, "", wxPoint(10, 120), wxSize(250, 30));
 	// b.) Numbers 0-9
-	number0 = new wxButton(this, ID_NUMBER_0, "0", wxPoint(10, 400), wxSize(50, 50));
-	number1 = new wxButton(this, ID_NUMBER_1, "1", wxPoint(10, 350), wxSize(50, 50));
-	number2 = new wxButton(this, ID_NUMBER_2, "2", wxPoint(60, 350), wxSize(50, 50));
-	number3 = new wxButton(this, ID_NUMBER_3, "3", wxPoint(110, 350), wxSize(50, 50));
-	number4 = new wxButton(this, ID_NUMBER_4, "4", wxPoint(10, 300), wxSize(50, 50));
-	number5 = new wxButton(this, ID_NUMBER_5, "5", wxPoint(60, 300), wxSize(50, 50));
-	number6 = new wxButton(this, ID_NUMBER_6, "6", wxPoint(110, 300), wxSize(50, 50));
-	number7 = new wxButton(this, ID_NUMBER_7, "7", wxPoint(10, 250), wxSize(50, 50));
-	number8 = new wxButton(this, ID_NUMBER_8, "8", wxPoint(60, 250), wxSize(50, 50));
-	number9 = new wxButton(this, ID_NUMBER_9, "9", wxPoint(110, 250), wxSize(50, 50));
+	//number0 = new wxButton(this, ID_NUMBER_0, "0", wxPoint(10, 400), wxSize(50, 50));
+	// testing ButtonFactory  implementation
+	number0 = ButtonFactory::CreateNumber0Button(this);
+	number1 = ButtonFactory::CreateNumber1Button(this);
+	number2 = ButtonFactory::CreateNumber2Button(this);
+	number3 = ButtonFactory::CreateNumber3Button(this);
+	number4 = ButtonFactory::CreateNumber4Button(this);
+	number5 = ButtonFactory::CreateNumber5Button(this);
+	number6 = ButtonFactory::CreateNumber6Button(this);
+	number7 = ButtonFactory::CreateNumber7Button(this);
+	number8 = ButtonFactory::CreateNumber8Button(this);
+	number9 = ButtonFactory::CreateNumber9Button(this);
+	add = ButtonFactory::CreateAddButton(this);
+	sub = ButtonFactory::CreateSubButton(this);
+	mult = ButtonFactory::CreateMultButton(this);
+	div = ButtonFactory::CreateDivButton(this);
+	mod = ButtonFactory::CreateModButton(this);
+
+	//number1 = new wxButton(this, ID_NUMBER_1, "1", wxPoint(10, 350), wxSize(50, 50));
+	//number2 = new wxButton(this, ID_NUMBER_2, "2", wxPoint(60, 350), wxSize(50, 50));
+	//number3 = new wxButton(this, ID_NUMBER_3, "3", wxPoint(110, 350), wxSize(50, 50));
+	//number4 = new wxButton(this, ID_NUMBER_4, "4", wxPoint(10, 300), wxSize(50, 50));
+	//number5 = new wxButton(this, ID_NUMBER_5, "5", wxPoint(60, 300), wxSize(50, 50));
+	//number6 = new wxButton(this, ID_NUMBER_6, "6", wxPoint(110, 300), wxSize(50, 50));
+	//number7 = new wxButton(this, ID_NUMBER_7, "7", wxPoint(10, 250), wxSize(50, 50));
+	//number8 = new wxButton(this, ID_NUMBER_8, "8", wxPoint(60, 250), wxSize(50, 50));
+	//number9 = new wxButton(this, ID_NUMBER_9, "9", wxPoint(110, 250), wxSize(50, 50));
 	// c.) Binary Operators: +, -, *, /, % (as modulo)
-	add = new wxButton(this, ID_ADD, "+", wxPoint(160, 350), wxSize(50, 50));
-	sub = new wxButton(this, ID_SUB, "-", wxPoint(210, 350), wxSize(50, 50));
-	mult = new wxButton(this, ID_MULT, "*", wxPoint(160, 300), wxSize(50, 50));
-	div = new wxButton(this, ID_DIV, "/", wxPoint(210, 300), wxSize(50, 50));
-	mod = new wxButton(this, ID_MOD, "mod", wxPoint(210, 400), wxSize(50, 50));
+	//add = new wxButton(this, ID_ADD, "+", wxPoint(160, 350), wxSize(50, 50));
+	//sub = new wxButton(this, ID_SUB, "-", wxPoint(210, 350), wxSize(50, 50));
+	//mult = new wxButton(this, ID_MULT, "*", wxPoint(160, 300), wxSize(50, 50));
+	//div = new wxButton(this, ID_DIV, "/", wxPoint(210, 300), wxSize(50, 50));
+	//mod = new wxButton(this, ID_MOD, "mod", wxPoint(210, 400), wxSize(50, 50));
+	
 	// d.) Unary Operators: sin, cos, tan (rads and/or deg)
 	sin = new wxButton(this, ID_SIN, "sin(x)", wxPoint(60, 200), wxSize(50, 50));
 	cos = new wxButton(this, ID_COS, "cos(x)", wxPoint(110, 200), wxSize(50, 50));

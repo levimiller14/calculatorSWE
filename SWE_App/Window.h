@@ -10,33 +10,6 @@ private:
 	// Equals Button/Calculations
 	bool EvaluateExpression(wxString expression, double& result);
 
-	// enumerator for Button IDs?
-	enum
-	{
-		ID_NUMBER_0,
-		ID_NUMBER_1,
-		ID_NUMBER_2,
-		ID_NUMBER_3,
-		ID_NUMBER_4,
-		ID_NUMBER_5,
-		ID_NUMBER_6,
-		ID_NUMBER_7,
-		ID_NUMBER_8,
-		ID_NUMBER_9,
-		ID_ADD,
-		ID_SUB,
-		ID_MULT,
-		ID_DIV,
-		ID_MOD,
-		ID_SIN,
-		ID_COS,
-		ID_TAN,
-		ID_EQUALS,
-		ID_AC,
-		ID_C,
-		ID_DECIMAL,
-		ID_NEGATIVE
-	};
 
 	// lets add buttons (23 total(?), probably need more, PEMDAS w exponent signs and parentheses etc)
 	// name as the corresponding buttons for ease of access/teamwork etc
@@ -84,5 +57,34 @@ private:
 public:
 	// default constructor for our window
 	Window();
+
+	// moved to public: IDs more accessible to ButtonFactory
+	// enumerator for Button IDs?
+	enum
+	{
+		ID_NUMBER_0,
+		ID_NUMBER_1,
+		ID_NUMBER_2,
+		ID_NUMBER_3,
+		ID_NUMBER_4,
+		ID_NUMBER_5,
+		ID_NUMBER_6,
+		ID_NUMBER_7,
+		ID_NUMBER_8,
+		ID_NUMBER_9,
+		ID_ADD,
+		ID_SUB,
+		ID_MULT,
+		ID_DIV,
+		ID_MOD,
+		ID_SIN,
+		ID_COS,
+		ID_TAN,
+		ID_EQUALS,
+		ID_AC,
+		ID_C,
+		ID_DECIMAL,
+		ID_NEGATIVE
+	};
 };
 
