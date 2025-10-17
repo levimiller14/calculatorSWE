@@ -648,6 +648,7 @@ Window::Window() : wxFrame(nullptr, wxID_ANY, "CALCULATOR", wxPoint(200, 200), w
 	// b.) Numbers 0-9
 	//number0 = new wxButton(this, ID_NUMBER_0, "0", wxPoint(10, 400), wxSize(50, 50));
 	// testing ButtonFactory  implementation
+	// "built" buttonfactory, set up coords pos output etc there, simplified here
 	number0 = ButtonFactory::CreateNumber0Button(this);
 	number1 = ButtonFactory::CreateNumber1Button(this);
 	number2 = ButtonFactory::CreateNumber2Button(this);

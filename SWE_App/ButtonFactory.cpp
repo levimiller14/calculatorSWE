@@ -130,3 +130,41 @@ wxButton* ButtonFactory::CreateDecimalButton(wxWindow* parent)
 	return CreateStandardButton(parent, Window::ID_NEGATIVE, "-(x)", 110, 400);
 }
 
+// returns text to be appended upon  button Click
+wxString ButtonFactory::GetButtonText(int buttonId)
+{
+	switch (buttonId)
+	{
+		// 0-9
+		case Window::ID_NUMBER_0: return "0";
+		case Window::ID_NUMBER_1: return "1";
+		case Window::ID_NUMBER_2: return "2";
+		case Window::ID_NUMBER_3: return "3";
+		case Window::ID_NUMBER_4: return "4";
+		case Window::ID_NUMBER_5: return "5";
+		case Window::ID_NUMBER_6: return "6";
+		case Window::ID_NUMBER_7: return "7";
+		case Window::ID_NUMBER_8: return "8";
+		case Window::ID_NUMBER_9: return "9";
+
+		// binary
+		case Window::ID_ADD: return "+";
+		case Window::ID_SUB: return "-";
+		case Window::ID_MULT: return "*";
+		case Window::ID_DIV: return "/";
+		case Window::ID_MOD: return "mod";
+
+		// unary
+		case Window::ID_SIN: return "sin";
+		case Window::ID_COS: return "cos";
+		case Window::ID_TAN: return "tan";
+
+		// symbols
+		case Window::ID_DECIMAL: return ".";
+		case Window::ID_NEGATIVE: return "-";
+		
+		// AC/C/=
+		default: return "";
+	}
+	return wxString();
+}
