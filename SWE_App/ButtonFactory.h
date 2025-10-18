@@ -50,6 +50,9 @@ public:
 	// buttonFactory GetButtonText centralization/optimization
 	static wxString GetButtonText(int buttonId);
 
+	// which buttons need extra shit not just appending text
+	static bool IsSpecialActionButton(int buttonId);
+
 	//static wxButton* CreateNumber0Button(wxWindow* parent);
 	//static wxButton* CreateNumber0Button(wxWindow* parent);
 	//static wxButton* CreateNumber0Button(wxWindow* parent);

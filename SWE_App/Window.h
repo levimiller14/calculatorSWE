@@ -10,6 +10,8 @@ private:
 	// Equals Button/Calculations
 	bool EvaluateExpression(wxString expression, double& result);
 
+	// validation
+	bool ValidateExpression(const wxString& expression);
 
 	// lets add buttons (23 total(?), probably need more, PEMDAS w exponent signs and parentheses etc)
 	// name as the corresponding buttons for ease of access/teamwork etc

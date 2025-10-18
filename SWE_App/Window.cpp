@@ -55,103 +55,25 @@ void Window::OnButtonClick(wxCommandEvent& event)
 
 	// Button Functionality
 	int id = event.GetId();
-	// 1.) When the following buttons are pressed, button label should be added to textbox
-	switch (id)
+
+	// cleaning this up BIGLY by using factory methods
+	if (ButtonFactory::IsSpecialActionButton(id))
 	{
-		// a.) Numbers 0-9
-		case ID_NUMBER_0:
-			// adds to text box
-			textBox->AppendText("0");
-			break;
-		case ID_NUMBER_1:
-			textBox->AppendText("1");
-			break;
-		case ID_NUMBER_2:
-			textBox->AppendText("2");
-			break;
-		case ID_NUMBER_3:
-			textBox->AppendText("3");
-			break;
-		case ID_NUMBER_4:
-			textBox->AppendText("4");
-			break;
-		case ID_NUMBER_5:
-			textBox->AppendText("5");
-			break;
-		case ID_NUMBER_6:
-			textBox->AppendText("6");
-			break;
-		case ID_NUMBER_7:
-			textBox->AppendText("7");
-			break;
-		case ID_NUMBER_8:
-			textBox->AppendText("8");
-			break;
-		case ID_NUMBER_9:
-			textBox->AppendText("9");
-			break;
-
-		// b.) Binary Operators
-		case ID_ADD:
-			textBox->AppendText("+");
-			break;
-		case ID_SUB:
-			textBox->AppendText("-");
-			break;
-		case ID_MULT:
-			textBox->AppendText("*");
-			break;
-		case ID_DIV:
-			textBox->AppendText("/");
-			break;
-		case ID_MOD:
-			textBox->AppendText("%");
-			break;
-
-		// c.) Decimal
-		case ID_DECIMAL:
-			textBox->AppendText(".");
-			break;
-
-		// d.) Negative
-		case ID_NEGATIVE:
-			textBox->AppendText("-");
-			break;
-
-		// e.) Unary Operators
-		case ID_SIN:
-			textBox->AppendText("sin");
-			break;
-		case ID_COS:
-			textBox->AppendText("cos");
-			break;
-		case ID_TAN:
-			textBox->AppendText("tan");
-			break;
-
-		// Clear (fully clear text box)
+		switch (id)
+		{
+		// ALL CLEAR
 		case ID_AC:
+			//clear EVERYTHING
 			textBox->Clear();
 			break;
-
-		// Backspace (one character at a time)
+		// CLEAR/BACKSPACE
 		case ID_C:
 		{
-
-			// if textBox not empty
+			// back, removing last character, OR SIN COS TAN in entirety?
 			wxString text = textBox->GetValue();
-			// special cases for sin/cos/tan because they are stubborn assholes
-			// if text finisher is "sin/cos/tan"
-			if (text.EndsWith("sin"))
-			{
-				// set current textBox Value to text - 3 (letters sin/cos/tan)
-				textBox->SetValue(text.substr(0, text.Length() - 3));
-			}
-			else if (text.EndsWith("cos"))
-			{
-				textBox->SetValue(text.substr(0, text.Length() - 3));
-			}
-			else if (text.EndsWith("tan"))
+
+			// handle trig
+			if (text.EndsWith("sin") || text.EndsWith("cos") || text.EndsWith("tan"))
 			{
 				textBox->SetValue(text.substr(0, text.Length() - 3));
 			}
@@ -162,17 +84,22 @@ void Window::OnButtonClick(wxCommandEvent& event)
 			}
 			break;
 		}
-			
-		// Equals (calculate whatever string, clear it, display result in textbox)
+		// EQUALS = 
 		case ID_EQUALS:
-			// Equals Button/Calculations
-			// Implement simple calculations/evaluations
+		{
+			// evaluate
 			wxString expression = textBox->GetValue();
 
-			// empty?
 			if (expression.IsEmpty())
 			{
-				break; // nothing
+				break;
+			}
+
+			// validate
+			if (!ValidateExpression(expression))
+			{
+				textBox->SetValue("Error");
+				break;
 			}
 
 			double result = 0;
@@ -188,8 +115,242 @@ void Window::OnButtonClick(wxCommandEvent& event)
 				textBox->SetValue("Error");
 			}
 			break;
+			}
+		}
 	}
-			//textBox->AppendText("=");
+	else
+	{
+		wxString textToAppend = ButtonFactory::GetButtonText(id);
+		if (!textToAppend.IsEmpty())
+		{
+			textBox->AppendText(textToAppend);
+		}
+	}
+	//// 1.) When the following buttons are pressed, button label should be added to textbox
+	//switch (id)
+	//{
+	//	// a.) Numbers 0-9
+	//	case ID_NUMBER_0:
+	//		// adds to text box
+	//		textBox->AppendText("0");
+	//		break;
+	//	case ID_NUMBER_1:
+	//		textBox->AppendText("1");
+	//		break;
+	//	case ID_NUMBER_2:
+	//		textBox->AppendText("2");
+	//		break;
+	//	case ID_NUMBER_3:
+	//		textBox->AppendText("3");
+	//		break;
+	//	case ID_NUMBER_4:
+	//		textBox->AppendText("4");
+	//		break;
+	//	case ID_NUMBER_5:
+	//		textBox->AppendText("5");
+	//		break;
+	//	case ID_NUMBER_6:
+	//		textBox->AppendText("6");
+	//		break;
+	//	case ID_NUMBER_7:
+	//		textBox->AppendText("7");
+	//		break;
+	//	case ID_NUMBER_8:
+	//		textBox->AppendText("8");
+	//		break;
+	//	case ID_NUMBER_9:
+	//		textBox->AppendText("9");
+	//		break;
+	//
+	//	// b.) Binary Operators
+	//	case ID_ADD:
+	//		textBox->AppendText("+");
+	//		break;
+	//	case ID_SUB:
+	//		textBox->AppendText("-");
+	//		break;
+	//	case ID_MULT:
+	//		textBox->AppendText("*");
+	//		break;
+	//	case ID_DIV:
+	//		textBox->AppendText("/");
+	//		break;
+	//	case ID_MOD:
+	//		textBox->AppendText("%");
+	//		break;
+	//
+	//	// c.) Decimal
+	//	case ID_DECIMAL:
+	//		textBox->AppendText(".");
+	//		break;
+	//
+	//	// d.) Negative
+	//	case ID_NEGATIVE:
+	//		textBox->AppendText("-");
+	//		break;
+	//
+	//	// e.) Unary Operators
+	//	case ID_SIN:
+	//		textBox->AppendText("sin");
+	//		break;
+	//	case ID_COS:
+	//		textBox->AppendText("cos");
+	//		break;
+	//	case ID_TAN:
+	//		textBox->AppendText("tan");
+	//		break;
+	//
+	//	// Clear (fully clear text box)
+	//	case ID_AC:
+	//		textBox->Clear();
+	//		break;
+	//
+	//	// Backspace (one character at a time)
+	//	case ID_C:
+	//	{
+	//
+	//		// if textBox not empty
+	//		wxString text = textBox->GetValue();
+	//		// special cases for sin/cos/tan because they are stubborn assholes
+	//		// if text finisher is "sin/cos/tan"
+	//		if (text.EndsWith("sin"))
+	//		{
+	//			// set current textBox Value to text - 3 (letters sin/cos/tan)
+	//			textBox->SetValue(text.substr(0, text.Length() - 3));
+	//		}
+	//		else if (text.EndsWith("cos"))
+	//		{
+	//			textBox->SetValue(text.substr(0, text.Length() - 3));
+	//		}
+	//		else if (text.EndsWith("tan"))
+	//		{
+	//			textBox->SetValue(text.substr(0, text.Length() - 3));
+	//		}
+	//		else if (!text.IsEmpty())
+	//		{
+	//			text.RemoveLast();
+	//			textBox->SetValue(text);
+	//		}
+	//		break;
+	//	}
+	//		
+	//	// Equals (calculate whatever string, clear it, display result in textbox)
+	//	case ID_EQUALS:
+	//		// Equals Button/Calculations
+	//		// Implement simple calculations/evaluations
+	//		wxString expression = textBox->GetValue();
+	//
+	//		// empty?
+	//		if (expression.IsEmpty())
+	//		{
+	//			break; // nothing
+	//		}
+	//
+	//		double result = 0;
+	//		bool success = EvaluateExpression(expression, result);
+	//
+	//		if (success)
+	//		{
+	//			double rounded = round(result * 100.0) / 100.0;
+	//			textBox->SetValue(std::to_string(rounded));
+	//		}
+	//		else
+	//		{
+	//			textBox->SetValue("Error");
+	//		}
+	//		break;
+	//}
+	//		//textBox->AppendText("=");
+}
+
+// Validate before evaluating
+bool Window::ValidateExpression(const wxString& expression)
+{
+	if (expression.IsEmpty())
+	{
+		return false;
+	}
+
+	// check for operators at beginning (except minus for negative)
+	if (expression[0] == '+' || expression[0] == '*' || expression[0] == '/' || expression[0] == '%')
+	{
+		return false;
+	}
+
+	// if at end
+	wxChar lastChar = expression[expression.Length() - 1];
+	if (lastChar == '+' || lastChar == '-' || lastChar == '*' || lastChar == '/' || lastChar == '%' || lastChar == '.')
+	{
+		return false;
+	}
+
+	// check for consecutive operator and multiple decimals
+	bool lastWasOperator = false;
+	bool lastWasDecimal = false;
+
+	for (size_t i = 0; i < expression.Length(); i++)
+	{
+		wxChar c = expression[i];
+		bool isOperator = (c == '+' || c == '-' || c == '*' || c == '/' || c == '%');
+
+		// consecutive decimals
+		if (c == '.')
+		{
+			if (lastWasDecimal || lastWasOperator)
+			{
+				return false;
+
+				lastWasDecimal = true;
+			}
+			else if (isOperator)
+			{
+				// reset decimal tracking
+				lastWasDecimal = false;
+
+				// check for multiple consecutive operators
+				// ALLOW minus after operator
+				if (lastWasOperator && c != '-')
+				{
+					return false;
+
+					// don't allow two minuses in a row
+					if (lastWasOperator && c == '-' && i > 0 && expression[i - 1] == '-')
+					{
+						return false;
+
+						lastWasOperator = true;
+					}
+					else if (wxIsdigit(c))
+					{
+						lastWasOperator = false;
+						lastWasDecimal = false;
+					}
+					else if (c == 's' || c == 'c' || c == 't')
+					{
+						// check if sin/cos/tan
+						if (i + 2 < expression.Length())
+						{
+							wxString trigFunc = expression.Mid(i, 3);
+							if (trigFunc == "sin" || trigFunc == "cos" || trigFunc == "tan")
+							{
+								// 1 2 skip a few
+								i += 2;
+								lastWasOperator = false;
+								lastWasDecimal = false;
+								continue;
+							}
+						}
+						return false;
+					}
+					else if (c != 'c')
+					{
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+	}
 }
 
 // Equals Button/Calculations Implementation

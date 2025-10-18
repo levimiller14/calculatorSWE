@@ -168,3 +168,9 @@ wxString ButtonFactory::GetButtonText(int buttonId)
 	}
 	return wxString();
 }
+
+// handle returns for special buttons (= AC C)
+bool ButtonFactory::IsSpecialActionButton(int buttonId)
+{
+	return(buttonId == Window::ID_EQUALS || buttonId == Window::ID_AC || buttonId == Window::ID_C);
+}
