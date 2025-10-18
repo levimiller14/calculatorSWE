@@ -8,10 +8,12 @@ private:
 	void OnButtonClick(wxCommandEvent& event);
 
 	// Equals Button/Calculations
-	bool EvaluateExpression(wxString expression, double& result);
+	// Moved to CalculatorProcessor
+	// bool EvaluateExpression(wxString expression, double& result);
 
+	// Moved to CalculatorProcessor
 	// validation
-	bool ValidateExpression(const wxString& expression);
+	// bool ValidateExpression(const wxString& expression);
 
 	// lets add buttons (23 total(?), probably need more, PEMDAS w exponent signs and parentheses etc)
 	// name as the corresponding buttons for ease of access/teamwork etc
