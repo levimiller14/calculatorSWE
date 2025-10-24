@@ -3,15 +3,28 @@
 
 const wxSize ButtonFactory::BUTTON_SIZE(50, 50);
 
+// for testing, creating minimal button w/o parent?
+wxButton* ButtonFactory::CreateStandardButton(wxWindow* parent, int id, const wxString& label, int x, int y)
+{
+	if (parent == nullptr)
+	{
+		wxButton* button = new wxButton();
+		button->SetId(id);
+		button->SetLabel(label);
+		return button;
+	}
+	return new wxButton(parent, id, label, wxPoint(x, y), BUTTON_SIZE);
+}
+
 wxButton* ButtonFactory::CreateButton(wxWindow* parent, int id, const wxString& label, const wxPoint& pos, const wxSize& size)
 {
 	return new wxButton(parent, id, label, pos, size);
 }
 
-wxButton* ButtonFactory::CreateStandardButton(wxWindow* parent, int id, const wxString& label, int x, int y)
-{
-	return new wxButton(parent, id, label, wxPoint(x, y), BUTTON_SIZE);
-}
+//wxButton* ButtonFactory::CreateStandardButton(wxWindow* parent, int id, const wxString& label, int x, int y)
+//{
+//	return new wxButton(parent, id, label, wxPoint(x, y), BUTTON_SIZE);
+//}
 
 // refactored, created all and TODO: update in Window.cpp
 wxButton* ButtonFactory::CreateNumber0Button(wxWindow* parent)
@@ -115,19 +128,20 @@ wxButton* ButtonFactory::CreateACButton(wxWindow* parent)
 	return CreateStandardButton(parent, Window::ID_AC, "AC", 210, 250);
 }
 
+// just now catching these mistakes smh
 wxButton* ButtonFactory::CreateNegativeButton(wxWindow* parent)
 {
-	return CreateStandardButton(parent, Window::ID_C, "C", 160, 250);
+	return CreateStandardButton(parent, Window::ID_NEGATIVE, "-", 160, 250);
 }
 
 wxButton* ButtonFactory::CreateCButton(wxWindow* parent)
 {
-	return CreateStandardButton(parent, Window::ID_DECIMAL, ".", 60, 400);
+	return CreateStandardButton(parent, Window::ID_C, "C", 60, 400);
 }
 
 wxButton* ButtonFactory::CreateDecimalButton(wxWindow* parent)
 {
-	return CreateStandardButton(parent, Window::ID_NEGATIVE, "-(x)", 110, 400);
+	return CreateStandardButton(parent, Window::ID_DECIMAL, ".", 110, 400);
 }
 
 // returns text to be appended upon  button Click
