@@ -1,6 +1,7 @@
 #include "ButtonFactory.h"
 #include "Window.h"
 
+// boop
 const wxSize ButtonFactory::BUTTON_SIZE(50, 50);
 
 // for testing, creating minimal button w/o parent?
